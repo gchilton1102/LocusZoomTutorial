@@ -1,0 +1,135 @@
+---
+title: "LocusZoom Tutorial"
+---
+Locus Zoom is a tool that creates interactive plots with GWAS data.
+
+In order to do this, the data file that you upload to the software must be in the correct format.
+
+<span style="color: maroon;"><font size="5">Edit Data File to the Correct Format</font></span> 
+
+Obtain data set with the following criteria/columns:
+
+Chromosome Number
+
+Reference Allele
+
+P-Value
+
+Position
+
+Alternative Allele
+
+Standard Error
+
+Allele Frequency
+
+The reference allele is the base that is found in the reference genome, and the alternative allele is a base other than the reference allele that is found at that locus.
+
+For this example, we will be using GWAS summary statistics from the Pan-UK Biobank.
+
+The LocusZoom software does not accept files that are larger than 1 GB, so you may need to remove unnecessary columns.
+
+If this is the case, use the R package "dplyr" to edit the data.
+
+
+```{r, message=FALSE}
+#load libraries to read in the files and edit the data
+library(data.table)
+library(dplyr)
+```
+```{r}
+#read in the data file
+example <- fread("~/mets-gwas/gwasAFR_chron")
+#use dplyr to edit out unnecessary data
+lzExample <- example %>%
+  #select function chooses the columns in the data that you want to be included in the file
+  select(chr, pos, ref, alt, beta_AFR, se_AFR, pval_AFR, af_AFR)
+#fwrite writes the data from the variable into a file
+#the file needs to be tab-delimited for LocusZoom, so sep="\t"
+#"exampleData" is the name of the file that will be created with this command
+fwrite(lzExample, "exampleData", append= FALSE, quote = "auto", sep="\t", row.names = FALSE, col.names=TRUE)
+```
+Here is the first 6 rows in the new data file:
+```{r, echo=FALSE}
+head(lzExample)
+```
+<span style="color: maroon;"><font size="5">Create LocusZoom Account</font></span>
+
+Go to the LocusZoom Website:
+
+[LocusZoom](https://my.locuszoom.org/)
+
+You will have to create an account to make a LocusZoom plot.
+
+<span style="color: maroon;"><font size="5">Upload GWAS Data file</font></span>
+
+Once you have created an account, click the "Upload" button in the upper left hand corner
+
+```{r, echo=FALSE}
+knitr::include_graphics("LocusZoom1.png")
+```
+
+Once you are on the "Upload Summary Statistics" page, you will enter information matching the plot you want to create.
+
+Choose "GRCh37" for the build and upload your correctly edited file. 
+
+Before you can upload your file, you will need to select the correct columns for each data type.
+
+```{r, echo=FALSE, out.width="50%"}
+
+knitr::include_graphics("LocusZoom2.png")
+```
+
+If your columns do not match, make sure your file is tab-delimited and you included the correct columns in the select function. 
+
+Fill out the following fields in the "Optional" selections
+
+```{r, echo= FALSE, out.width="50%"}
+knitr::include_graphics("LocusZoom3.png")
+```
+
+<span style="color: maroon;"><font size="5">Submit the File</font></span>
+
+Once you have entered the correct information, submit the file to LocusZoom.
+
+It will take a minute for the file to be processed and the data to be plotted. Once it is finished, you will receive an email with a link to view the Manhattan Plot.
+
+<span style="color: maroon;"><font size="5">Viewing and Analyzing Significant Hits</font></span>
+
+Under the Manhattan Plot there will be a list of top SNPs.
+
+
+```{r, echo=FALSE, out.width="75%"}
+knitr::include_graphics("LocusZoom4.png")
+```
+
+When you click the Marker number, you will be able to see closer view of the significant locus.
+
+```{r, echo=FALSE}
+knitr::include_graphics("LocusZoom5.png")
+```
+
+This page includes further information about other SNPs and genes in the area that others using LocusZoom have discovered.
+
+The purple diamond represents the SNP that you have selected, and the circles surrounding it are the other SNPs near the locus.
+
+The color of each circle depends on how it associates with the selected SNP. The closer the color is to red, the more highly likely it is to be related with the selected SNP.
+
+Here is another example of a top SNP with multiple related SNPs:
+
+```{r, echo=FALSE}
+knitr::include_graphics("LocusZoom6.png")
+```
+
+If you click the "Display Options" button in the top right hand corner, you will be given the following options:
+```{r,echo=FALSE}
+knitr::include_graphics("LocusZoom7.png")
+```
+After clicking the "95% credible set (boolean)" option, you will see which related SNPs are credible to analyze.
+
+<span style="color: maroon;"><font size="5">Other Information</font></span>
+
+Locus Zoom is an interactive tool that can be used in many ways. 
+
+It provides information about genes located around the significant SNPs as well as findings from other GWAS at that locus.
+
