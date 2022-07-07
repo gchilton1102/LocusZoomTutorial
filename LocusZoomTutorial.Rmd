@@ -39,7 +39,7 @@ library(dplyr)
 ```
 ```{r}
 #read in the data file
-example <- fread("~/mets-gwas/gwasAFR_chron")
+example <- fread("/home/grace/mets-gwas/gwasFiles/gwasAFR_chron")
 #use dplyr to edit out unnecessary data
 lzExample <- example %>%
   #select function chooses the columns in the data that you want to be included in the file
